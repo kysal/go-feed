@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "content": "Hello world 3"
+        "content": "Hello world 4"
       }
   auth: inherit
 

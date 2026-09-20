@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+    </head>
+    <body>
+        <section>
+            <h2>Create new post</h2>
+                <textarea id="post-content"></textarea>
+                <div></div>
+                <button id="post-button">Post</button>
+        </section>
+        {{ range . }}
+            <article>
+                <p>{{ .Content }}</p>
+                <small>Created at {{ .CreatedAt }}</small>
+            </article>
+
+        {{ end }}
+    </body>
+    <script>
+        const button = document.getElementById("post-button")
+        button.addEventListener("click", async () => {
+            const contentField = document.getElementById("post-content")
+            const res = await fetch("http://localhost:8080/api/posts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ content: contentField.value })
+            })
+
+            if (res.status === 201) {
+                contentField.value = ""
+                window.location.reload()
+            }
+        })
+    </script>
+</html>

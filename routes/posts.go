@@ -2,10 +2,13 @@ package routes
 
 import (
 	"encoding/json"
+	"html/template"
 	"net/http"
 
 	"github.com/kysal/go-feed/models"
 )
+
+const pageTemplate = "html/template.html"
 
 func GetPosts(w http.ResponseWriter, r *http.Request) {
 	posts, err := models.GetAllPosts()
@@ -24,6 +27,10 @@ func PublishPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
+	if post.Content == "" {
+		http.Error(w, "Post cannot be empty", http.StatusBadRequest)
+	}
+
 	// to be changed
 	post.FeedId = 1
 
@@ -33,4 +40,21 @@ func PublishPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func GetPostsPage(w http.ResponseWriter, r *http.Request) {
+	posts, err := models.GetAllPosts()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	page, err := template.ParseFiles(pageTemplate)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	err = page.Execute(w, posts)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }

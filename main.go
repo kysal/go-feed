@@ -31,5 +31,12 @@ func main() {
 		}
 	})
 
+	http.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			routes.GetPostsPage(w, r)
+		}
+	})
+
 	http.ListenAndServe(":8080", nil)
 }
