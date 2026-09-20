@@ -40,7 +40,7 @@ func createTables() {
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		content TEXT NOT NULL,
 		created_at DATETIME NOT NULL,
-		feed_id INTEGER,
+		feed_id INTEGER NOT NULL,
 		FOREIGN KEY(feed_id) REFERENCES feeds(id)
 	)
 	`
