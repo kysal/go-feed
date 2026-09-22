@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Test</title>
+        <link rel="stylesheet" href="stylesheet.css">
     </head>
     <body>
         <section>
@@ -10,13 +11,16 @@
                 <div></div>
                 <button id="post-button">Post</button>
         </section>
-        {{ range . }}
-            <article>
-                <p>{{ .Content }}</p>
-                <small>Created at {{ .CreatedAt }}</small>
-            </article>
 
-        {{ end }}
+        <div class="waterfall">
+            {{ range . }}
+                <article class="post-container">
+                    <p>{{ .Content }}</p>
+                    <small>Created at {{ .CreatedAt }}</small>
+                    <a href="/api/"><button>Delete</button></a>
+                </article>
+            {{ end }}            
+        </div>
     </body>
     <script>
         const button = document.getElementById("post-button")

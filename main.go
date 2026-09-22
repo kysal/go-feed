@@ -38,5 +38,13 @@ func main() {
 		}
 	})
 
+	http.HandleFunc("/stylesheet.css", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "html/stylesheet.css")
+	})
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/posts", http.StatusMovedPermanently)
+	})
+
 	http.ListenAndServe(":8080", nil)
 }
