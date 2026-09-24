@@ -14,6 +14,7 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 	posts, err := models.GetAllPosts()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Add("Content-Type", "application/json")
@@ -26,9 +27,11 @@ func PublishPost(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&post)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 	if post.Content == "" {
 		http.Error(w, "Post cannot be empty", http.StatusBadRequest)
+		return
 	}
 
 	// to be changed
@@ -37,6 +40,7 @@ func PublishPost(w http.ResponseWriter, r *http.Request) {
 	err = post.Publish()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
@@ -46,15 +50,18 @@ func GetPostsPage(w http.ResponseWriter, r *http.Request) {
 	posts, err := models.GetAllPosts()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	page, err := template.ParseFiles(pageTemplate)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	err = page.Execute(w, posts)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 }
