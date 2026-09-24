@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/kysal/go-feed/db"
+	"github.com/kysal/go-feed/feed"
 )
 
 type Post struct {
@@ -29,7 +30,7 @@ func (p *Post) Publish() error {
 }
 
 func GetAllPosts() ([]Post, error) {
-	rows, err := db.DB.Query("SELECT * FROM posts LIMIT 100")
+	rows, err := db.DB.Query("SELECT * FROM posts WHERE feed_id = ? LIMIT 100", feed.FeedId)
 	if err != nil {
 		return nil, err
 	}
@@ -39,12 +40,10 @@ func GetAllPosts() ([]Post, error) {
 
 	for rows.Next() {
 		var currentPost Post
-
 		err = rows.Scan(&currentPost.Id, &currentPost.Content, &currentPost.CreatedAt, &currentPost.FeedId)
 		if err != nil {
 			return posts, err
 		}
-
 		posts = append(posts, currentPost)
 	}
 

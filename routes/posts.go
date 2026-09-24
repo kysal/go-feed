@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/kysal/go-feed/feed"
 	"github.com/kysal/go-feed/models"
 )
 
@@ -34,8 +35,7 @@ func PublishPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// to be changed
-	post.FeedId = 1
+	post.FeedId = feed.FeedId
 
 	err = post.Publish()
 	if err != nil {
