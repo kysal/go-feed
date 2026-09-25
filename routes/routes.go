@@ -1,10 +1,19 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 )
 
 func InitRoutes() {
+	http.HandleFunc("/api/posts/{id}", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.Method)
+		switch r.Method {
+		case http.MethodDelete:
+			DeletePost(w, r)
+		}
+	})
+
 	http.HandleFunc("/api/posts", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:

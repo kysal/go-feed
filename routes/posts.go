@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"html/template"
 	"net/http"
+	"strconv"
 
 	"github.com/kysal/go-feed/feed"
 	"github.com/kysal/go-feed/models"
@@ -44,6 +45,23 @@ func PublishPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func DeletePost(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		http.Error(w, "Could not parse post id", http.StatusBadRequest)
+		return
+	}
+
+	post := models.Post{Id: id}
+	err = post.Delete()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func GetPostsPage(w http.ResponseWriter, r *http.Request) {

@@ -29,6 +29,14 @@ func (p *Post) Publish() error {
 
 }
 
+func (p *Post) Delete() error {
+	_, err := db.DB.Exec("DELETE FROM posts where id = ?", p.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetAllPosts() ([]Post, error) {
 	rows, err := db.DB.Query("SELECT * FROM posts WHERE feed_id = ? LIMIT 100", feed.FeedId)
 	if err != nil {

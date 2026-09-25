@@ -17,11 +17,12 @@
                 <article class="post-container">
                     <p>{{ .Content }}</p>
                     <small>Created at {{ .CreatedAt }}</small>
-                    <a href="/api/"><button>Delete</button></a>
+                    <button class="post-delete-button" data-id="{{ .Id }}">Delete</button>
                 </article>
             {{ end }}            
         </div>
     </body>
+
     <script>
         const button = document.getElementById("post-button")
         button.addEventListener("click", async () => {
@@ -36,6 +37,21 @@
                 contentField.value = ""
                 window.location.reload()
             }
+        })
+
+
+        const deleteButtons = document.querySelectorAll(".post-delete-button")
+        deleteButtons.forEach((delBtn) => {
+            delBtn.addEventListener("click", async () => {
+                const id = delBtn.dataset.id
+                console.log(id)
+                const res = await fetch(`http://localhost:8080/api/posts/${id}`, {
+                    method: "DELETE"
+                }) 
+                if (res.ok) {
+                    window.location.reload()
+                }
+            })
         })
     </script>
 </html>
